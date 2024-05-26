@@ -109,19 +109,18 @@ li{
     background-color: white;
 }
 
-
-.close-button{
-    color: white;
-    justify-self: end;
-    cursor: pointer;
-    transition: all ease-in-out .1s;
-}
-
 .active{
     background-color: white;
 }
 
-.close-button:hover{
+.delete-button{
+    color: white;
+    justify-self: end;
+    cursor: pointer;
+    transition: opacity ease-in-out .1s;
+}
+
+.delete-button:hover{
     opacity: 70%;
 }
 
