@@ -9,17 +9,23 @@
 body{
     margin: 0 auto;
     max-width: 800px;
-    height: auto;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: azure;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(185,179,193,1) 10%, rgba(111,147,169,1) 50%);
     background-image: url(https://papers.co/wallpaper/papers.co-am37-low-poly-art-mountain-red-illust-art-25-wallpaper.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    
-    
+    background-attachment: fixed; 
+}
+
+main{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 h1{
@@ -30,6 +36,7 @@ h1{
 
 div#create-container{
     display: flex;
+    position: sticky;
     width: 100%;
     justify-content: center;
     gap: 5px;
@@ -124,10 +131,21 @@ li{
     opacity: 70%;
 }
 
-span{
+li span{
     width: 85%;
     color: white;
     flex-grow: 1;
     font-size: 15px;
     overflow-wrap: break-word;
+}
+
+.credits{
+    color: white;
+    font-size: 12px;
+    opacity: 70%;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 200px) {
+    
 }
