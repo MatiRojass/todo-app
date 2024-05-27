@@ -4,66 +4,79 @@ window.addEventListener("load", ()=>{
     const list = document.getElementById("list")
     const newTaskInput = document.getElementById("newTask")
 
-     // Función para guardar las tareas en el almacenamiento local
-     const guardarTareasEnLocalStorage = () => {
-        const tareas = [];
+    const localDataSave = () => {
+        let data = []
         list.querySelectorAll("li").forEach(todo => {
-            const tarea = {
-                contenido: todo.querySelector("span").textContent,
-                completada: todo.querySelector("button.checkbox").classList.contains("active")
-            };
-            tareas.push(tarea);
-        });
-        localStorage.setItem("tareas", JSON.stringify(tareas));
-    };
+            const task = {
+                content: todo.querySelector("span").textContent,
+                complete: todo.querySelector("button.checkbox").classList.contains("active")
+            }
+            data.push(task)
+        })
 
-    // Función para cargar las tareas desde el almacenamiento local
-    const cargarTareasDesdeLocalStorage = () => {
-        const tareas = JSON.parse(localStorage.getItem("tareas"));
-        if (tareas) {
-            tareas.forEach(tarea => {
-                const todo = document.createElement("li");
-                const checkbox = document.createElement("button");
-                checkbox.className = "checkbox";
-                const span = document.createElement("span");
-                span.textContent = tarea.contenido;
-                const closeButton = document.createElement("i");
-                closeButton.className = "fa-solid fa-xmark delete-button";
-                todo.appendChild(checkbox);
-                todo.appendChild(span);
-                todo.appendChild(closeButton);
-                if (tarea.completada) {
-                    checkbox.classList.add("active");
-                    span.style.textDecoration = "line-through";
-                    checkbox.style.backgroundColor = "white";
+        localStorage.setItem("tasks", JSON.stringify(data))
+    }
+
+    const loadLocalData = () => {
+        const tasks = JSON.parse(localStorage.getItem("tasks"))
+        if(tasks){
+            tasks.forEach(task => {
+                const todo = document.createElement("li")
+        
+                const checkbox = document.createElement("button")
+                checkbox.className = "checkbox"  
+                
+                const span = document.createElement("span") 
+                span.textContent = task.content
+                
+                const deleteButton = document.createElement("i")
+                deleteButton.className = "fa-solid fa-xmark delete-button"
+                
+                if(task.complete){
+                    checkbox.classList.add("active")
+                    span.style.textDecoration = "line-through"
+                    checkbox.style.backgroundColor = "white"
                 }
-                list.appendChild(todo);
-    
-                closeButton.addEventListener("click", () => {
-                    const todo = closeButton.closest("li");
-                    todo.remove();
-                    guardarTareasEnLocalStorage(); // Guardar las tareas después de eliminar una
-                });
-    
+        
+                todo.appendChild(checkbox)
+                todo.appendChild(span)
+                todo.appendChild(deleteButton)
+        
+                list.appendChild(todo)
+        
+        
+                deleteButton.addEventListener("click", () => {
+                    const todo = deleteButton.closest("li")
+                    todo.remove()
+                    localDataSave()
+                })
+        
                 checkbox.addEventListener("click", () => {
-                    checkbox.classList.toggle("active");
-                    const todo = checkbox.closest("li");
-                    const span = todo.querySelector("span");
-                    const isActive = checkbox.classList.contains("active");
-                    if (isActive) {
-                        span.style.textDecoration = "line-through";
-                        checkbox.style.backgroundColor = "white";
-                    } else {
-                        span.style.textDecoration = "none";
-                        checkbox.style.backgroundColor = "transparent";
+        
+                    checkbox.classList.toggle("active")
+        
+                    const todo = checkbox.closest("li")
+                    const span = todo.querySelector("span")
+                    const isActive = checkbox.classList.contains("active")
+        
+                    if(isActive){
+                        span.style.textDecoration = "line-through"
+                        checkbox.style.backgroundColor = "white"
+                    }else{
+                        span.style.textDecoration = "none"
+                        checkbox.style.backgroundColor = "transparent"
                     }
-                    guardarTareasEnLocalStorage(); // Guardar las tareas después de marcar como completada/incompleta
-                });
-            });
-        }
-    };
+        
+                    localDataSave()
+                })
+        
+                localDataSave()
 
-    cargarTareasDesdeLocalStorage(); // Cargar las tareas al cargar la página
+            })
+        }
+    }
+
+    loadLocalData()
 
     const createTask = () => {
         const newTaskContent = newTaskInput.value
@@ -82,21 +95,21 @@ window.addEventListener("load", ()=>{
         const span = document.createElement("span") 
         span.textContent = newTaskContent
         
-        const closeButton = document.createElement("i")
-        closeButton.className = "fa-solid fa-xmark delete-button"
+        const deleteButton = document.createElement("i")
+        deleteButton.className = "fa-solid fa-xmark delete-button"
 
         todo.appendChild(checkbox)
         todo.appendChild(span)
-        todo.appendChild(closeButton)
+        todo.appendChild(deleteButton)
 
         list.appendChild(todo)
 
         newTaskInput.value = ""
 
-        closeButton.addEventListener("click", () => {
-            const todo = closeButton.closest("li");
+        deleteButton.addEventListener("click", () => {
+            const todo = deleteButton.closest("li")
             todo.remove()
-            guardarTareasEnLocalStorage(); // Guardar las tareas después de eliminar una
+            localDataSave()
         })
 
         checkbox.addEventListener("click", () => {
@@ -115,18 +128,18 @@ window.addEventListener("load", ()=>{
                 checkbox.style.backgroundColor = "transparent"
             }
 
-            guardarTareasEnLocalStorage(); // Guardar las tareas después de marcar como completada/incompleta
+            localDataSave()
         })
 
-        guardarTareasEnLocalStorage(); // Guardar las tareas después de crear una nueva tarea
+        localDataSave()
     }
 
     newTaskInput.addEventListener("keypress", (event)=>{
         if(event.key == "Enter"){
             if (newTaskInput.value.trim() === "") {
-                alert("La tarea no puede estar vacía");
-                event.preventDefault(); // Evitar que se envíe el formulario si el campo está vacío
-                return;
+                alert("La tarea no puede estar vacía")
+                event.preventDefault() 
+                return
             }
             createTask()
         }
